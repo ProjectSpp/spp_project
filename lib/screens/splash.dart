@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project_spp/conf.dart';
 import 'dart:async';
 
-import 'package:project_spp/screens/home.dart';
+import 'package:project_spp/screens/pages/home.dart';
+import 'package:project_spp/screens/intro.dart';
 // import 'package:projectspp/home.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -10,12 +13,16 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreen extends State<SplashScreen> with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _controller2;
   void initState() {
     _controller = AnimationController(
         duration: Duration(milliseconds: 1000), vsync: this);
+    _controller2 = AnimationController(
+        duration: Duration(milliseconds: 1500), vsync: this);
     super.initState();
     splashscreenStart();
     _controller.forward();
+    _controller2.forward();
   }
 
   splashscreenStart() async {
@@ -23,51 +30,80 @@ class _SplashScreen extends State<SplashScreen> with TickerProviderStateMixin {
     return Timer(duration, () {
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => Home(title: 'Flutter Demo Home Page')),
+        MaterialPageRoute(builder: (context) => IntroScreen()),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    double sheight = MediaQuery.of(context).size.height;
+    double swidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Center(
-                child: ScaleTransition(
-                    scale: Tween<double>(begin: 0.5, end: 1.0)
-                        .animate(_controller),
-                    child: FadeTransition(
-                      opacity: Tween<double>(begin: 0.0, end: 1.0)
-                          .animate(_controller),
-                      child: Container(
-                        width: 200,
-                        height: 100,
-                        child: Image.asset(
-                          "assets/images/smk.png",
-                          fit: BoxFit.scaleDown,
-                        ),
-                      ),
-                    ))),
-            SizedBox(
-              height: 24.0,
-            ),
-            ScaleTransition(
-              scale: Tween<double>(begin: 0.8, end: 1.0).animate(_controller),
-              child: Text(
-                "SPP",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30.0,
+            Container(
+              child: FadeTransition(
+                opacity:
+                    Tween<double>(begin: 0.0, end: 1.0).animate(_controller),
+                child: SvgPicture.asset(
+                  bgTV,
+                  width: swidth,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
+            Column(
+              children: [
+                Center(
+                    child: ScaleTransition(
+                        scale: Tween<double>(begin: 0.5, end: 1.0)
+                            .animate(_controller2),
+                        child: FadeTransition(
+                          opacity: Tween<double>(begin: 0.0, end: 1.0)
+                              .animate(_controller2),
+                          child: Container(
+                            width: 200,
+                            height: 100,
+                            child: Image.asset(
+                              imgSMK,
+                              fit: BoxFit.scaleDown,
+                            ),
+                          ),
+                        ))),
+                SizedBox(
+                  height: (sheight / 36),
+                ),
+                ScaleTransition(
+                  scale:
+                      Tween<double>(begin: 0.8, end: 1.0).animate(_controller2),
+                  child: Text(
+                    "SPP DIGITAL",
+                    style: TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.bold,
+                      fontSize: (swidth / 15),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.topCenter,
+              child: FadeTransition(
+                opacity:
+                    Tween<double>(begin: 0.0, end: 1.0).animate(_controller),
+                child: SvgPicture.asset(
+                  bgBV,
+                  width: swidth,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            )
           ],
         ),
       ),
